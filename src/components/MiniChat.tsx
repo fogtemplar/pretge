@@ -23,7 +23,7 @@ function nameColor(name: string) {
 
 export function MiniChat() {
   const { t } = useLang();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [name, setName] = useState('');
   const [nameSet, setNameSet] = useState(false);
   const [text, setText] = useState('');
