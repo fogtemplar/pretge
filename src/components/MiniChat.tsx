@@ -22,11 +22,16 @@ function nameColor(name: string) {
   return COLORS[Math.abs(h) % COLORS.length];
 }
 
+function getSavedName(): string {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem('chat_name') || '';
+}
+
 export function MiniChat() {
   const { t } = useLang();
   const [open, setOpen] = useState(true);
-  const [name, setName] = useState('');
-  const [nameSet, setNameSet] = useState(false);
+  const [name, setName] = useState(getSavedName);
+  const [nameSet, setNameSet] = useState(() => !!getSavedName());
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [unread, setUnread] = useState(0);
@@ -85,17 +90,29 @@ export function MiniChat() {
     const trimmed = text.trim();
     if (!trimmed || !name) return;
     setText('');
-    await supabase.from('messages').insert({
+
+    // Optimistic update: show immediately
+    const optimistic: Message = {
+      id: `opt-${Date.now()}`,
       name: name.slice(0, 20),
       text: trimmed.slice(0, 500),
+      ts: Date.now(),
+    };
+    setMessages((prev) => [...prev, optimistic]);
+
+    await supabase.from('messages').insert({
+      name: optimistic.name,
+      text: optimistic.text,
     });
-    await fetchMessages();
+    fetchMessages();
   };
 
   const handleNameSubmit = () => {
-    if (name.trim()) {
-      setName(name.trim());
+    const trimmedName = name.trim();
+    if (trimmedName) {
+      setName(trimmedName);
       setNameSet(true);
+      localStorage.setItem('chat_name', trimmedName);
     }
   };
 
