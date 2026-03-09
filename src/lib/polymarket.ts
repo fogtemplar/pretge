@@ -32,7 +32,6 @@ function extractProjectName(title: string): string | null {
 
 // Alias map for projects with inconsistent naming across events
 const NAME_ALIASES: Record<string, string> = {
-  based: 'base',
   'felix protocol': 'felix',
 };
 
