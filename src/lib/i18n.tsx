@@ -29,6 +29,13 @@ const translations = {
     tipFdvFloor: 'Most meaningful FDV threshold: first ≥50% bracket → highest probability ≥20% (excl. lowest) → fallback.',
     tipExpFdv: 'Weighted average FDV from cumulative bracket probabilities × midpoint of each range.',
     tipFdvProb: 'Cumulative probability of FDV being above each threshold. Red highlight = FDV Floor.',
+    chatTitle: 'Chat',
+    chatMessages: 'msgs',
+    chatEnterName: 'Enter your nickname',
+    chatJoin: 'Join',
+    chatEmpty: 'No messages yet. Say hi!',
+    chatPlaceholder: 'Type a message...',
+    chatSend: 'Send',
   },
   ko: {
     title: 'Pre-TGE Oracle',
@@ -56,6 +63,13 @@ const translations = {
     tipFdvFloor: '의미 있는 FDV 기준: ≥50% 구간 우선 → ≥20% 중 최고 확률(최저 구간 제외) → 폴백.',
     tipExpFdv: '누적 구간 확률 × 각 범위 중간값의 가중 평균 FDV.',
     tipFdvProb: '각 구간 이상의 FDV 누적 확률. 빨간 강조 = FDV 바닥.',
+    chatTitle: '채팅',
+    chatMessages: '개',
+    chatEnterName: '닉네임을 입력하세요',
+    chatJoin: '입장',
+    chatEmpty: '아직 메시지가 없습니다. 인사해보세요!',
+    chatPlaceholder: '메시지 입력...',
+    chatSend: '전송',
   },
 } as const;
 
