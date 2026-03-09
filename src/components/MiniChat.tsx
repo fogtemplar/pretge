@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLang } from '@/lib/i18n';
+import { supabase } from '@/lib/supabase';
 
 interface Message {
   id: string;
@@ -30,28 +31,44 @@ export function MiniChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [unread, setUnread] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const prevCountRef = useRef(0);
+  const openRef = useRef(open);
+  openRef.current = open;
 
-  const fetchMessages = useCallback(async () => {
-    try {
-      const res = await fetch('/api/chat');
-      if (res.ok) {
-        const data: Message[] = await res.json();
-        setMessages(data);
-        if (!open && data.length > prevCountRef.current) {
-          setUnread((u) => u + (data.length - prevCountRef.current));
-        }
-        prevCountRef.current = data.length;
-      }
-    } catch { /* ignore */ }
-  }, [open]);
-
+  // Initial fetch
   useEffect(() => {
-    fetchMessages();
-    const iv = setInterval(fetchMessages, 3000);
-    return () => clearInterval(iv);
-  }, [fetchMessages]);
+    supabase
+      .from('messages')
+      .select('*')
+      .order('ts', { ascending: true })
+      .limit(100)
+      .then(({ data }) => {
+        if (data) setMessages(data as Message[]);
+      });
+  }, []);
 
+  // Realtime subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel('chat')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        (payload) => {
+          const msg = payload.new as Message;
+          setMessages((prev) => [...prev.slice(-199), msg]);
+          if (!openRef.current) {
+            setUnread((u) => u + 1);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Auto-scroll
   useEffect(() => {
     if (open) {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -63,14 +80,10 @@ export function MiniChat() {
     const trimmed = text.trim();
     if (!trimmed || !name) return;
     setText('');
-    try {
-      await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, text: trimmed }),
-      });
-      await fetchMessages();
-    } catch { /* ignore */ }
+    await supabase.from('messages').insert({
+      name: name.slice(0, 20),
+      text: trimmed.slice(0, 500),
+    });
   };
 
   const handleNameSubmit = () => {
@@ -144,7 +157,7 @@ export function MiniChat() {
                 {messages.map((m) => (
                   <div key={m.id} className="text-xs leading-relaxed">
                     <span className={`font-semibold ${nameColor(m.name)}`}>{m.name}</span>
-                    <span className="text-zinc-500 mx-1">·</span>
+                    <span className="text-zinc-500 mx-1">&middot;</span>
                     <span className="text-zinc-300 break-words">{m.text}</span>
                   </div>
                 ))}
