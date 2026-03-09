@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLang } from '@/lib/i18n';
 import { supabase } from '@/lib/supabase';
 
@@ -34,39 +34,44 @@ export function MiniChat() {
   const openRef = useRef(open);
   openRef.current = open;
 
-  // Initial fetch
-  useEffect(() => {
-    supabase
+  const fetchMessages = useCallback(async () => {
+    const { data } = await supabase
       .from('messages')
       .select('*')
       .order('ts', { ascending: true })
-      .limit(100)
-      .then(({ data }) => {
-        if (data) setMessages(data as Message[]);
+      .limit(100);
+    if (data) {
+      setMessages((prev) => {
+        if (!openRef.current && data.length > prev.length) {
+          setUnread((u) => u + (data.length - prev.length));
+        }
+        return data as Message[];
       });
+    }
   }, []);
 
-  // Realtime subscription
+  // Initial fetch + polling fallback
+  useEffect(() => {
+    fetchMessages();
+    const iv = setInterval(fetchMessages, 3000);
+    return () => clearInterval(iv);
+  }, [fetchMessages]);
+
+  // Realtime subscription (bonus: instant updates if enabled)
   useEffect(() => {
     const channel = supabase
       .channel('chat')
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages' },
-        (payload) => {
-          const msg = payload.new as Message;
-          setMessages((prev) => [...prev.slice(-199), msg]);
-          if (!openRef.current) {
-            setUnread((u) => u + 1);
-          }
-        },
+        () => { fetchMessages(); },
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [fetchMessages]);
 
   // Auto-scroll
   useEffect(() => {
@@ -84,6 +89,7 @@ export function MiniChat() {
       name: name.slice(0, 20),
       text: trimmed.slice(0, 500),
     });
+    await fetchMessages();
   };
 
   const handleNameSubmit = () => {
