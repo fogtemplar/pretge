@@ -5,6 +5,7 @@ import type { ProjectData } from '@/types';
 import { FdvBar } from './FdvBar';
 import { findTopFdvBracket, findTopLaunch } from '@/lib/highlights';
 import { useLang } from '@/lib/i18n';
+import { InfoTip } from './InfoTip';
 
 interface ProjectCardProps {
   project: ProjectData;
@@ -160,7 +161,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-1.5 mb-3">
-        <div className="p-2 bg-zinc-800/50 rounded-lg">
+        <div className="relative p-2 bg-zinc-800/50 rounded-lg">
+          <InfoTip text={t('tipLaunch')} />
           <div className="text-[10px] text-zinc-500 mb-0.5 uppercase tracking-wide">{t('launch')}</div>
           {nextLaunch ? (
             <>
@@ -171,7 +173,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <div className="text-[11px] text-zinc-600 mt-0.5">{t('noData')}</div>
           )}
         </div>
-        <div className="p-2 bg-zinc-800/50 rounded-lg">
+        <div className="relative p-2 bg-zinc-800/50 rounded-lg">
+          <InfoTip text={t('tipFdvFloor')} />
           <div className="text-[10px] text-zinc-500 mb-0.5 uppercase tracking-wide">{t('fdvFloor')}</div>
           {(() => {
             const floor = findTopFdvBracket(project.fdvBrackets);
@@ -185,7 +188,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
             );
           })()}
         </div>
-        <div className="p-2 bg-zinc-800/50 rounded-lg">
+        <div className="relative p-2 bg-zinc-800/50 rounded-lg">
+          <InfoTip text={t('tipExpFdv')} />
           <div className="text-[10px] text-zinc-500 mb-0.5 uppercase tracking-wide">{t('expFdv')}</div>
           {project.expectedFdv ? (
             <>

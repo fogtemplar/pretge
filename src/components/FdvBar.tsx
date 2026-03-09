@@ -3,6 +3,7 @@
 import type { FdvBracket } from '@/types';
 import { findTopFdvBracket } from '@/lib/highlights';
 import { useLang } from '@/lib/i18n';
+import { InfoTip } from './InfoTip';
 
 interface FdvBarProps {
   brackets: FdvBracket[];
@@ -24,10 +25,20 @@ export function FdvBar({ brackets }: FdvBarProps) {
   const topThreshold = findTopFdvBracket(brackets)?.threshold ?? null;
 
   return (
-    <div className="space-y-1.5">
-      <h3 className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide">
-        {t('fdvProbability')}
-      </h3>
+    <div className="relative space-y-1.5">
+      <div className="flex items-center gap-1">
+        <h3 className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide">
+          {t('fdvProbability')}
+        </h3>
+        <div className="relative group">
+          <div className="w-3.5 h-3.5 rounded-full bg-zinc-700/80 flex items-center justify-center cursor-help text-[8px] font-bold text-zinc-400 group-hover:bg-zinc-600 group-hover:text-zinc-200 transition-colors">
+            !
+          </div>
+          <div className="hidden group-hover:block absolute left-0 top-5 w-52 p-2 bg-zinc-800 border border-zinc-700 rounded-lg text-[10px] text-zinc-300 leading-relaxed shadow-xl z-20">
+            {t('tipFdvProb')}
+          </div>
+        </div>
+      </div>
       {brackets.length === 0 ? (
         <div className="px-2 py-1.5 text-xs text-zinc-600">{t('noData')}</div>
       ) : (

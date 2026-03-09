@@ -25,6 +25,10 @@ const translations = {
     tokenLaunchProbability: 'Token Launch Probability',
     airdropProbability: 'Airdrop Probability',
     closed: 'Closed',
+    tipLaunch: 'Highest probability among active (non-closed) launch dates. Volume used as tiebreaker.',
+    tipFdvFloor: 'Most meaningful FDV threshold: first ≥50% bracket → highest probability ≥20% (excl. lowest) → fallback.',
+    tipExpFdv: 'Weighted average FDV from cumulative bracket probabilities × midpoint of each range.',
+    tipFdvProb: 'Cumulative probability of FDV being above each threshold. Red highlight = FDV Floor.',
   },
   ko: {
     title: 'Pre-TGE Oracle',
@@ -48,6 +52,10 @@ const translations = {
     tokenLaunchProbability: '토큰 런칭 확률',
     airdropProbability: '에어드롭 확률',
     closed: '종료',
+    tipLaunch: '활성(미종료) 런칭 날짜 중 가장 높은 확률. 동률 시 거래량으로 결정.',
+    tipFdvFloor: '의미 있는 FDV 기준: ≥50% 구간 우선 → ≥20% 중 최고 확률(최저 구간 제외) → 폴백.',
+    tipExpFdv: '누적 구간 확률 × 각 범위 중간값의 가중 평균 FDV.',
+    tipFdvProb: '각 구간 이상의 FDV 누적 확률. 빨간 강조 = FDV 바닥.',
   },
 } as const;
 
