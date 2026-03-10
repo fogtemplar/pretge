@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import useSWR from 'swr';
 import type { ApiResponse } from '@/types';
 import { ProjectCard } from '@/components/ProjectCard';
-import { MiniChat } from '@/components/MiniChat';
 import { LangProvider, useLang } from '@/lib/i18n';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -180,9 +179,6 @@ function Dashboard() {
           </a>
         </div>
       </footer>
-
-      {/* Mini Chat */}
-      <MiniChat />
 
       {/* Floating badge */}
       <a
