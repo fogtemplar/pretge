@@ -21,6 +21,12 @@ const COLORS = [
   'bg-purple-400',
 ];
 
+function fmtVol(v: number): string {
+  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+  if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
+  return `$${v.toFixed(0)}`;
+}
+
 export function FdvBar({ brackets, slug }: FdvBarProps) {
   const { t } = useLang();
   const topThreshold = findTopFdvBracket(brackets)?.threshold ?? null;
@@ -75,6 +81,9 @@ export function FdvBar({ brackets, slug }: FdvBarProps) {
                 </div>
                 <span className={`text-[10px] font-medium w-10 text-right ${isFloor ? 'text-red-400' : 'text-zinc-200'}`}>
                   {(b.probability * 100).toFixed(1)}%
+                </span>
+                <span className="text-[9px] text-zinc-600 w-12 text-right">
+                  {fmtVol(b.volume)}
                 </span>
               </div>
             );

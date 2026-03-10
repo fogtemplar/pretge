@@ -228,18 +228,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   {tl.date}
                   {tl.closed && <span className="ml-1 text-[9px] text-zinc-500 uppercase">{t('closed')}</span>}
                 </span>
-                <span
-                  className={`font-medium shrink-0 ml-1 ${
-                    isTop
-                      ? 'text-red-400'
-                      : tl.probability >= 0.5
-                        ? 'text-emerald-400'
-                        : tl.probability >= 0.2
-                          ? 'text-amber-400'
-                          : 'text-zinc-400'
-                  }`}
-                >
-                  {(tl.probability * 100).toFixed(1)}%
+                <span className="flex items-center gap-1.5 shrink-0 ml-1">
+                  <span className="text-[9px] text-zinc-600">{formatVolume(tl.volume)}</span>
+                  <span
+                    className={`font-medium ${
+                      isTop
+                        ? 'text-red-400'
+                        : tl.probability >= 0.5
+                          ? 'text-emerald-400'
+                          : tl.probability >= 0.2
+                            ? 'text-amber-400'
+                            : 'text-zinc-400'
+                    }`}
+                  >
+                    {(tl.probability * 100).toFixed(1)}%
+                  </span>
                 </span>
               </div>
               );
@@ -269,16 +272,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   {ad.date}
                   {ad.closed && <span className="ml-1 text-[9px] text-zinc-500 uppercase">{t('closed')}</span>}
                 </span>
-                <span
-                  className={`font-medium shrink-0 ml-1 ${
-                    ad.probability >= 0.5
-                      ? 'text-emerald-400'
-                      : ad.probability >= 0.2
-                        ? 'text-amber-400'
-                        : 'text-zinc-400'
-                  }`}
-                >
-                  {(ad.probability * 100).toFixed(1)}%
+                <span className="flex items-center gap-1.5 shrink-0 ml-1">
+                  <span className="text-[9px] text-zinc-600">{formatVolume(ad.volume)}</span>
+                  <span
+                    className={`font-medium ${
+                      ad.probability >= 0.5
+                        ? 'text-emerald-400'
+                        : ad.probability >= 0.2
+                          ? 'text-amber-400'
+                          : 'text-zinc-400'
+                    }`}
+                  >
+                    {(ad.probability * 100).toFixed(1)}%
+                  </span>
                 </span>
               </div>
             ))}
