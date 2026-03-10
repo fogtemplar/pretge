@@ -7,6 +7,7 @@ import { InfoTip } from './InfoTip';
 
 interface FdvBarProps {
   brackets: FdvBracket[];
+  slug?: string;
 }
 
 const COLORS = [
@@ -20,16 +21,27 @@ const COLORS = [
   'bg-purple-400',
 ];
 
-export function FdvBar({ brackets }: FdvBarProps) {
+export function FdvBar({ brackets, slug }: FdvBarProps) {
   const { t } = useLang();
   const topThreshold = findTopFdvBracket(brackets)?.threshold ?? null;
 
   return (
     <div className="relative space-y-1.5">
       <div className="flex items-center gap-1">
-        <h3 className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide">
-          {t('fdvProbability')}
-        </h3>
+        {slug ? (
+          <a
+            href={`https://polymarket.com/event/${slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide hover:text-blue-400 transition-colors"
+          >
+            {t('fdvProbability')} ↗
+          </a>
+        ) : (
+          <h3 className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide">
+            {t('fdvProbability')}
+          </h3>
+        )}
         <div className="relative group">
           <div className="w-3.5 h-3.5 rounded-full bg-zinc-700/80 flex items-center justify-center cursor-help text-[8px] font-bold text-zinc-400 group-hover:bg-zinc-600 group-hover:text-zinc-200 transition-colors">
             !

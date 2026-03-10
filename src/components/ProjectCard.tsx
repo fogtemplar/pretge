@@ -145,15 +145,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-semibold text-zinc-100 truncate">
-            {project.name}{' '}
-            <a
-              href={`https://polymarket.com/event/${project.polymarketSlug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] font-normal text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              (Polymarket)
-            </a>
+            {project.name}
           </h2>
           <span className="text-[11px] text-zinc-500">{t('vol')}: {formatVolume(project.totalVolume)}</span>
         </div>
@@ -206,14 +198,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <div className="flex-1 overflow-y-auto min-h-0 space-y-3 pr-1 scrollbar-thin">
       {/* FDV Brackets */}
       <div>
-        <FdvBar brackets={project.fdvBrackets} />
+        <FdvBar brackets={project.fdvBrackets} slug={project.fdvSlug} />
       </div>
 
       {/* Token Launch Probability */}
       <div>
-        <h3 className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide mb-1.5">
-          {t('tokenLaunchProbability')}
-        </h3>
+        <a
+          href={`https://polymarket.com/event/${project.launchSlug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide mb-1.5 block hover:text-blue-400 transition-colors"
+        >
+          {t('tokenLaunchProbability')} ↗
+        </a>
         {project.tokenLaunch.length > 0 ? (() => {
           const topDate = findTopLaunch(project.tokenLaunch)?.date ?? null;
           return (

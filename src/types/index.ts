@@ -40,6 +40,8 @@ export interface ProjectData {
   name: string;
   icon: string;
   polymarketSlug: string;
+  fdvSlug: string;
+  launchSlug: string;
   expectedFdv: number | null;
   fdvBrackets: FdvBracket[];
   tokenLaunch: TokenLaunchDate[];

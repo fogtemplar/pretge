@@ -153,6 +153,8 @@ function processProject(group: DiscoveredGroup): ProjectData {
   const airdropDates: TokenLaunchDate[] = [];
   let totalVolume = 0;
   let polymarketSlug = '';
+  let fdvSlug = '';
+  let launchSlug = '';
 
   for (const event of group.events) {
     if (!polymarketSlug) polymarketSlug = event.slug;
@@ -167,6 +169,7 @@ function processProject(group: DiscoveredGroup): ProjectData {
       totalVolume += parseFloat(String(market.volume)) || 0;
 
       if (q.includes('fdv') || q.includes('market cap') || q.includes('mcap')) {
+        if (!fdvSlug) fdvSlug = event.slug;
         const threshold = parseFdvThreshold(market.question);
         if (threshold) {
           fdvBrackets.push({
@@ -177,6 +180,7 @@ function processProject(group: DiscoveredGroup): ProjectData {
           });
         }
       } else if (q.includes('launch a token') || q.includes('launch token')) {
+        if (!launchSlug) launchSlug = event.slug;
         tokenLaunch.push({
           date: parseDateLabel(market.question),
           probability: yesPrice,
@@ -215,6 +219,8 @@ function processProject(group: DiscoveredGroup): ProjectData {
     name: group.name,
     icon: group.image,
     polymarketSlug,
+    fdvSlug: fdvSlug || polymarketSlug,
+    launchSlug: launchSlug || polymarketSlug,
     expectedFdv: calculateExpectedFdv(dedupedFdv),
     fdvBrackets: dedupedFdv,
     tokenLaunch,
