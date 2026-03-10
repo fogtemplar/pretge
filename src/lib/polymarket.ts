@@ -126,13 +126,19 @@ function calculateExpectedFdv(brackets: FdvBracket[]): number | null {
   const sorted = [...brackets].sort((a, b) => a.threshold - b.threshold);
   let expectedFdv = 0;
 
+  // Below lowest bracket: P(FDV < lowest) = 1 - P(FDV >= lowest)
+  const pBelow = 1 - sorted[0].probability;
+  if (pBelow > 0) {
+    expectedFdv += (sorted[0].threshold / 2) * pBelow;
+  }
+
   for (let i = 0; i < sorted.length; i++) {
     const current = sorted[i];
     const next = sorted[i + 1];
     const pInBracket = current.probability - (next ? next.probability : 0);
     if (pInBracket <= 0) continue;
     const low = current.threshold;
-    const high = next ? next.threshold : current.threshold * 2;
+    const high = next ? next.threshold : current.threshold * 1.5;
     expectedFdv += ((low + high) / 2) * pInBracket;
   }
 
