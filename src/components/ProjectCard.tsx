@@ -239,7 +239,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   {tl.closed && <span className="ml-1 text-[9px] text-zinc-500 uppercase">{t('closed')}</span>}
                 </span>
                 <span className="flex items-center gap-1.5 shrink-0 ml-1">
-                  <span className="text-[9px] text-zinc-600">{formatVolume(tl.volume)}</span>
                   <span
                     className={`font-medium ${
                       isTop
@@ -253,6 +252,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   >
                     {(tl.probability * 100).toFixed(1)}%
                   </span>
+                  <span className="text-[9px] text-zinc-600 w-12 text-right">{formatVolume(tl.volume)}</span>
                 </span>
               </div>
               );
@@ -283,7 +283,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   {ad.closed && <span className="ml-1 text-[9px] text-zinc-500 uppercase">{t('closed')}</span>}
                 </span>
                 <span className="flex items-center gap-1.5 shrink-0 ml-1">
-                  <span className="text-[9px] text-zinc-600">{formatVolume(ad.volume)}</span>
                   <span
                     className={`font-medium ${
                       ad.probability >= 0.5
@@ -295,6 +294,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   >
                     {(ad.probability * 100).toFixed(1)}%
                   </span>
+                  <span className="text-[9px] text-zinc-600 w-12 text-right">{formatVolume(ad.volume)}</span>
                 </span>
               </div>
             ))}
