@@ -203,14 +203,24 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
       {/* Token Launch Probability */}
       <div>
-        <a
-          href={`https://polymarket.com/event/${project.launchSlug}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide mb-1.5 block hover:text-blue-400 transition-colors"
-        >
-          {t('tokenLaunchProbability')} ↗
-        </a>
+        <div className="flex items-center gap-1 mb-1.5">
+          <a
+            href={`https://polymarket.com/event/${project.launchSlug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] font-medium text-zinc-400 uppercase tracking-wide hover:text-blue-400 transition-colors"
+          >
+            {t('tokenLaunchProbability')} ↗
+          </a>
+          <div className="relative group">
+            <div className="w-3.5 h-3.5 rounded-full bg-zinc-700/80 flex items-center justify-center cursor-help text-[8px] font-bold text-zinc-400 group-hover:bg-zinc-600 group-hover:text-zinc-200 transition-colors">
+              !
+            </div>
+            <div className="hidden group-hover:block absolute left-0 top-5 w-52 p-2 bg-zinc-800 border border-zinc-700 rounded-lg text-[10px] text-zinc-300 leading-relaxed shadow-xl z-20">
+              {t('tipLaunch')}
+            </div>
+          </div>
+        </div>
         {project.tokenLaunch.length > 0 ? (() => {
           const topDate = findTopLaunch(project.tokenLaunch)?.date ?? null;
           return (
